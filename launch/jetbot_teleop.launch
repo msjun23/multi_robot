@@ -1,0 +1,11 @@
+<launch>
+    <group ns="jetbot1">
+        <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard" name="teleop_twist_keyboard"/>
+        <node pkg="jetbot_ros" type="jetbot_motors" name="jetbot_motors"/>
+    </group>
+
+    <group ns="jetbot2">
+        <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard" name="teleop_twist_keyboard"/>
+        <node pkg="jetbot_ros" type="jetbot_motors" name="jetbot_motors"/>
+    </group>
+</launch>
