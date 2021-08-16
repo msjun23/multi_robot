@@ -1,9 +1,10 @@
 <launch>
   <param name="/use_sim_time" value="true" />
+  <arg name="world_map" default="empty_wall"/>
 
   <!-- start world -->
   <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
-   args="$(find turtlebot3_gazebo)/worlds/empty_wall.world" respawn="false" output="screen" />
+   args="$(find turtlebot3_gazebo)/worlds/$(arg world_map).world" respawn="false" output="screen" />
 
   <!-- start gui -->
   <!--node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/-->
