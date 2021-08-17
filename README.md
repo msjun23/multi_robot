@@ -25,7 +25,7 @@ $ sudo apt install ros-melodic-turtlebot3
 $ sudo apt install ros-melodic-turtlebot3-msgs
 ```
 
-And now clone this repository to your catkin_ws.
+And now clone this repository to your catkin_ws/src.
 ```bash
 $ git clone https://github.com/msjun23/multi_robot.git
 ```
