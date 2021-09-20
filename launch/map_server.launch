@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="map" default="test" /> 
+
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find multi_robot)/cfg/maps/$(arg map)/$(arg map).yaml"/>
+</launch>
