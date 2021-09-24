@@ -133,6 +133,8 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/multi_robot_node.cpp)
+add_executable(multi_goals_listener src/multi_goals_listener.cpp)
+add_executable(goal_pub src/goal_pub.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -148,6 +150,8 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(multi_goals_listener ${catkin_LIBRARIES})
+target_link_libraries(goal_pub ${catkin_LIBRARIES})
 
 #############
 ## Install ##
