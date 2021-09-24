@@ -1,14 +1,37 @@
 <launch>
   <param name="/use_sim_time" value="true" />
-  <arg name="world_map" default="empty_wall"/>
+  <arg name="world_map" default="turtlebot3_world"/>
+  <arg name="map" default="test" />
+  <arg name="open_rviz" default="true"/>
+  <arg name="rviz_setting" default="test"/>
 
   <!-- start world -->
-  <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
-   args="$(find turtlebot3_gazebo)/worlds/$(arg world_map).world" respawn="false" output="screen" />
+  <!-- <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
+   args="$(find turtlebot3_gazebo)/worlds/$(arg world_map).world" respawn="false" output="screen" /> -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
 
   <!-- start gui -->
   <!--node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/-->
 
   <!-- include our robots -->
   <include file="$(find multi_robot)/launch/robots.launch"/>
+
+  <!-- Map Server -->
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find multi_robot)/cfg/maps/$(arg map)/$(arg map).yaml"/>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find multi_robot)/cfg/rviz/$(arg rviz_setting).rviz"/>
+    
+    <!--node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/-->
+  </group>
 </launch>
