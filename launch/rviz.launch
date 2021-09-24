@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <arg name="cfg" default="test"/>
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find multi_robot)/cfg/rviz/$(arg cfg).rviz" output="screen"/>
-  <!--<node pkg="rviz" type="rviz" name="rviz" output="screen"/> -->
-</launch>
