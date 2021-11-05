@@ -1,16 +1,50 @@
 <launch>
-    <arg name="robot_name"/>
-    <arg name="init_pose"/>
-    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <!-- Arguments -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="map_file" default="$(find turtlebot3_navigation)/maps/map.yaml"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="move_forward_only" default="false"/>
+  <arg name="robot_name" />
+  <arg name="init_pose" />
+  <arg name="tf_info" />
+  
+  <param name="robot_description" command="$(find xacro)/xacro $(find multi_robot)/cfg/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  
+  <!-- Spawn Robot -->>
+  <node name="spawn_minibot_model" pkg="gazebo_ros" type="spawn_model"
+    args="$(arg init_pose) -urdf -param robot_description -model $(arg robot_name)"
+    respawn="false" output="screen" />
+    
+  <!-- Robot State Publish-->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen" />
 
-    <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <!-- AMCL -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <param name="global_frame_id" value="/map"/>
+    <param name="odom_frame_id" value="$(arg tf_info)/odom"/>
+    <param name="base_frame_id" value="$(arg tf_info)/base_link"/>
 
-    <node name="spawn_minibot_model" pkg="gazebo_ros" type="spawn_model"
-          args="$(arg init_pose) -urdf -param robot_description -model $(arg robot_name)"
-          respawn="false" output="screen" />
-
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
-
-    <!-- The odometry estimator, throttling, fake laser etc. go here -->
-    <!-- All the stuff as from usual robot launch file -->
+    <remap from="static_map" to="/static_map"/>
+    <remap from="map" to="/map"/>
+    <remap from="initialpose" to="/initialpose"/>
+  </node>
+  
+  <!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find multi_robot)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find multi_robot)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find multi_robot)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find multi_robot)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find multi_robot)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find multi_robot)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="move_base_simple/goal" to="/move_base_simple/goal"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+  
+  <!-- The odometry estimator, throttling, fake laser etc. go here -->
+  <!-- All the stuff as from usual robot launch file -->
 </launch>

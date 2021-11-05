@@ -1,13 +1,11 @@
 <launch>
-  <!-- No namespace here as we will share this description. 
-       Access with slash at the beginning -->
-
   <!-- BEGIN ROBOT 1-->
   <group ns="ns1">
     <param name="tf_prefix" value="robot1_tf" />
     <include file="$(find multi_robot)/launch/one_robot.launch" >
       <arg name="robot_name"  value="Robot1" />
       <arg name="init_pose" value="-x -2 -y 1 -z 0" />
+      <arg name="tf_info" value="robot1_tf" />
     </include>
   </group>
 
@@ -17,6 +15,7 @@
     <include file="$(find multi_robot)/launch/one_robot.launch" >
       <arg name="robot_name"  value="Robot2" />
       <arg name="init_pose" value="-x -2 -y -1 -z 0" />
+      <arg name="tf_info" value="robot2_tf" />
     </include>
   </group>
 </launch>

@@ -3,7 +3,7 @@
   <arg name="world_map" default="turtlebot3_world"/>
   <arg name="map" default="test" />
   <arg name="open_rviz" default="true"/>
-  <arg name="rviz_setting" default="test"/>
+  <arg name="rviz_setting" default="multi_robot"/>
 
   <!-- start world -->
   <!-- <node name="gazebo" pkg="gazebo_ros" type="gazebo" 
